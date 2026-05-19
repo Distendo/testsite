@@ -16,13 +16,174 @@
     Нажми меня
 </button>
 
+<button onclick="showTime()">
+    Показать время
+</button>
+
+<button onclick="changeBackground()">
+    Сменить фон
+</button>
+
+<button onclick="clearText()">
+    Очистить текст
+</button>
+
+<br><br>
+
+<input type="text" id="nameInput" placeholder="Введите текст">
+
+<button onclick="showInput()">
+    Показать текст
+</button>
+
+<button onclick="saveCookie()">
+    Сохранить Cookie
+</button>
+
+<button onclick="loadCookie()">
+    Загрузить Cookie
+</button>
+
+<button onclick="showAllCookies()">
+    Показать все Cookie
+</button>
+
+<button onclick="deleteCookies()">
+    Удалить Cookie
+</button>
+
 <p id="output"></p>
 
+<hr>
+
+<h3>Все Cookie:</h3>
+<pre id="cookiesBox"></pre>
+
 <script>
+
 function testButton() {
     document.getElementById("output").innerText =
         "Нажата кнопка!";
 }
+
+function showTime() {
+    const time = new Date();
+
+    document.getElementById("output").innerText =
+        "Время: " + time.toLocaleTimeString();
+}
+
+function changeBackground() {
+
+    const colors = [
+        "white",
+        "lightblue",
+        "lightgreen",
+        "lightyellow",
+        "lightgray",
+        "pink"
+    ];
+
+    const randomColor =
+        colors[Math.floor(Math.random() * colors.length)];
+
+    document.body.style.background = randomColor;
+}
+
+function clearText() {
+    document.getElementById("output").innerText = "";
+}
+
+function showInput() {
+
+    const text =
+        document.getElementById("nameInput").value;
+
+    document.getElementById("output").innerText =
+        "Текст: " + text;
+}
+
+/* COOKIE FUNCTIONS */
+
+function saveCookie() {
+
+    const text =
+        document.getElementById("nameInput").value;
+
+    document.cookie =
+        "savedText=" + encodeURIComponent(text) +
+        "; expires=Fri, 31 Dec 2030 23:59:59 UTC; path=/";
+
+    document.getElementById("output").innerText =
+        "Cookie сохранён!";
+}
+
+function loadCookie() {
+
+    const cookies = document.cookie.split(";");
+
+    for(let i = 0; i < cookies.length; i++) {
+
+        let cookie = cookies[i].trim();
+
+        if(cookie.startsWith("savedText=")) {
+
+            const value =
+                decodeURIComponent(
+                    cookie.substring("savedText=".length)
+                );
+
+            document.getElementById("output").innerText =
+                "Cookie: " + value;
+
+            return;
+        }
+    }
+
+    document.getElementById("output").innerText =
+        "Cookie не найден!";
+}
+
+function showAllCookies() {
+
+    const box =
+        document.getElementById("cookiesBox");
+
+    if(document.cookie === "") {
+        box.innerText = "Cookie пустые";
+    } else {
+        box.innerText = document.cookie;
+    }
+}
+
+function deleteCookies() {
+
+    const cookies = document.cookie.split(";");
+
+    for(let i = 0; i < cookies.length; i++) {
+
+        const cookie =
+            cookies[i];
+
+        const eqPos =
+            cookie.indexOf("=");
+
+        const name =
+            eqPos > -1 ?
+            cookie.substr(0, eqPos).trim() :
+            cookie.trim();
+
+        document.cookie =
+            name +
+            "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    }
+
+    document.getElementById("output").innerText =
+        "Все Cookie удалены!";
+
+    document.getElementById("cookiesBox").innerText = "";
+}
+
 </script>
 
 </body>
